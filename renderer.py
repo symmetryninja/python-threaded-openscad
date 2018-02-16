@@ -74,16 +74,17 @@ def create_thread(q):
 q = queue.Queue()
 worker_threads = []
 
-# load up the queues
+# Load up the queues
 [q.put( model ) for model in models]
 
-# set up the threads
+# Set up the threads
 for worker in range(number_of_threads):
     worker_threads.append(threading.Thread(target=create_thread, args=(q,)))
 
-# run threads
+# Run threads
 for worker in worker_threads:
         worker.setDaemon(True)
         worker.start()
 
+# Tell python to wait for threads by "joining" them
 [worker.join() for worker in worker_threads]
