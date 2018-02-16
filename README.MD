@@ -16,6 +16,18 @@ If you render multiple models out of one or many OpenSCAD files and you're happy
 
 This was built with Python3.5.7 installed using pyenv, I'm no python master, this is not tricky.
 
+## Credits
+
+In the interests of making hard-to-render workloads I've used the following to eat up all your CPU cycles.
+
+### Dan Kirshner
+
+Thread module file from http://dkprojects.net/openscad-threads/ its fantastic!
+
+### A few people
+
+For more cpu stuff I used involute gears from here https://github.com/openscad/MCAD/blob/master/involute_gears.scad
+
 ## Running examples
 
 The base code tests how fast this can process using 4 threads, execute the code with no changes to see how well it works with 4 threads.

@@ -65,6 +65,7 @@ class Job:
         print(self.module_name + " rendering finished")
         os.remove(self.temp_file_name)
 
+# Thread wrapper
 def create_thread(q):
     cur_job = Job(q)
     cur_job.run()
