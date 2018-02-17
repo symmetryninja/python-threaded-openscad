@@ -90,4 +90,4 @@ __Note:__ The suffix value has to be understandable by OpenSCAD.
 
 [See Licence.txt](Licence.txt)
 
-Generally, do what you like with this code/project and say thanks if you want to - but if you safe the world or break the universe or anything in between, you're on your own.
+Generally, do what you like with this code/project and say thanks if you want to - but if you save the world or break the universe or anything in between, you're on your own.
