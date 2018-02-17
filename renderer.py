@@ -7,24 +7,24 @@ startTime = datetime.now()
 # Input Vars
 models = [
     {"module": "easy_render_5_for_dxf",  "suffix": "dxf"},
-    {"module": "difficult_render_1",     "suffix": "stl",},
+    # {"module": "difficult_render_1",     "suffix": "stl",},
     {"module": "easy_render_4",          "suffix": "stl",},
     {"module": "easy_render_1",          "suffix": "stl",},
-    {"module": "difficult_render_2",     "suffix": "stl",},
+    # {"module": "difficult_render_2",     "suffix": "stl",},
     {"module": "easy_render_2",          "suffix": "stl",},
     {"module": "easy_render_5",          "suffix": "stl",},
-    {"module": "difficult_render_3",     "suffix": "stl",},
+    # {"module": "difficult_render_3",     "suffix": "stl",},
     {"module": "easy_render_6",          "suffix": "stl",},
     {"module": "easy_render_7",          "suffix": "stl",},
-    {"module": "difficult_render_5",     "suffix": "stl",},
+    # {"module": "difficult_render_5",     "suffix": "stl",},
     {"module": "easy_render_8",          "suffix": "stl",},
     {"module": "easy_render_9",          "suffix": "stl",},
-    {"module": "difficult_render_4",     "suffix": "stl",},
+    # {"module": "difficult_render_4",     "suffix": "stl",},
     {"module": "easy_render_10",         "suffix": "stl",},
     {"module": "easy_render_3",          "suffix": "stl",},
 ]
 
-number_of_threads = 16
+number_of_threads = 1
 
 # Rendering worker class
 class Job:

@@ -56,6 +56,8 @@ Benchmarked on a mac with:
 
 I've configured a pretty brutal test, possibly introducing a variation thats way too high because the ```$fn = 80``` increases the amount of operations dramatically, still why not test a boat with a storm?
 
+In my default file, I've disabled rendering jobs for the really complex modules because they weren't demonstrating anything new, feel free to enable them.
+
 Threaded stats here:
 
 | Threads | Render time | Load notes |
@@ -63,9 +65,7 @@ Threaded stats here:
 | 1 | ? mins | computer useable
 | 2 | ? mins | computer useable
 | 4 | ? mins | computer useable
-| 8 | ? mins | computer useable 
-| 12 | ? mins | computer slightly less useable
-| 16 | ? mins | computer a little less useable
+| 8 | 0:03:38 | computer less useable
 
 ## Using it in your projects
 
