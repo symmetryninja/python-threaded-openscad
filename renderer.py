@@ -24,7 +24,7 @@ models = [
     {"module": "easy_render_3",          "suffix": "stl",},
 ]
 
-number_of_threads = 1
+number_of_threads = 4
 
 # Rendering worker class
 class Job:

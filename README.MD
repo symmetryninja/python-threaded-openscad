@@ -18,7 +18,7 @@ This was built with Python3.5.7 installed using pyenv, I'm no python master, thi
 
 ## Credits
 
-__Dan Kirshner__
+Dan Kirshner.
 
 In the interests of making hard-to-render workloads I've used the thread module file from http://dkprojects.net/openscad-threads/ its fantastic!
 
@@ -60,12 +60,18 @@ In my default file, I've disabled rendering jobs for the really complex modules 
 
 Threaded stats here:
 
-| Threads | Render time | Load notes |
+| Threads | Render time | Notes |
 | ------- | ----------- | ------ |
-| 1 | ? mins | computer useable
-| 2 | ? mins | computer useable
-| 4 | ? mins | computer useable
-| 8 | 0:03:38 | computer less useable
+| 1 | 0:11:08 - baseline| Comparable to the GUI - computer didn't notice
+| 2 | 0:05:49 - slightly slower half | A good speedup - computer still very useable
+| 4 | 0:03:22 - a bit slower than a quarter | Useful for 4 core CPU's - computer quite useable
+| 8 | 0:03:38 - slower than a quarter | Diminishing returns on a 4 core CPU - computer less useable
+
+As to be expected; my 4 core CPU does a better job at rendering 4 things at a time than it would trying to do 8 things at a time.
+
+I do find it interesting that 8 things at a time slows it down that much. It is to be expected because when your computer tries to simultaneously use more threads than it has cores, it is forced to sleep and wake threads, this process queueing costs processing time.
+
+If you have more core's use more threads!
 
 ## Using it in your projects
 
