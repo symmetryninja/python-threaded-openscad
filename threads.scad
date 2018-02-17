@@ -124,15 +124,15 @@ module metric_thread (diameter=8, pitch=1, length=1, internal=false, n_starts=1,
             // Solid center, including Dmin truncation.
             if (groove) {
                cylinder (r1=diameter/2, r2=tapered_diameter/2,
-                         h=length, $fn=n_segments);
+                         h=length);
             } else if (internal) {
                cylinder (r1=diameter/2 - h*h_fac1, r2=tapered_diameter/2 - h*h_fac1,
-                         h=length, $fn=n_segments);
+                         h=length);
             } else {
 
                // External thread.
                cylinder (r1=diameter/2 - h*h_fac2, r2=tapered_diameter/2 - h*h_fac2,
-                         h=length, $fn=n_segments);
+                         h=length);
             }
 
             if (groove) {
@@ -146,10 +146,10 @@ module metric_thread (diameter=8, pitch=1, length=1, internal=false, n_starts=1,
       // chamfer z=0 end if leadin is 2 or 3
       if (leadin == 2 || leadin == 3) {
          difference () {
-            cylinder (r=diameter/2 + 1, h=h*h_fac1*leadfac, $fn=n_segments);
+            cylinder (r=diameter/2 + 1, h=h*h_fac1*leadfac);
 
-            cylinder (r2=diameter/2, r1=diameter/2 - h*h_fac1*leadfac, h=h*h_fac1*leadfac,
-                      $fn=n_segments);
+            cylinder (r2=diameter/2, r1=diameter/2 - h*h_fac1*leadfac, h=h*h_fac1*leadfac
+                      );
          }
       }
 
@@ -157,9 +157,8 @@ module metric_thread (diameter=8, pitch=1, length=1, internal=false, n_starts=1,
       if (leadin == 1 || leadin == 2) {
          translate ([0, 0, length + 0.05 - h*h_fac1*leadfac]) {
             difference () {
-               cylinder (r=diameter/2 + 1, h=h*h_fac1*leadfac, $fn=n_segments);
-               cylinder (r1=tapered_diameter/2, r2=tapered_diameter/2 - h*h_fac1*leadfac, h=h*h_fac1*leadfac,
-                         $fn=n_segments);
+               cylinder (r=diameter/2 + 1, h=h*h_fac1*leadfac);
+               cylinder (r1=tapered_diameter/2, r2=tapered_diameter/2 - h*h_fac1*leadfac, h=h*h_fac1*leadfac);
             }
          }
       }

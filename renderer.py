@@ -1,28 +1,27 @@
 #!/usr/bin/env python3
 import threading, queue, subprocess, os
+from datetime import datetime
+
+startTime = datetime.now()
 
 # Input Vars
 models = [
-    {"module": "project_1_difficult_render_1", "suffix": "stl",},
-    {"module": "project_1_easy_render_4", "suffix": "stl",},
-    {"module": "project_1_difficult_render_4", "suffix": "stl",},
-    {"module": "project_1_easy_render_1", "suffix": "stl",},
-    {"module": "project_1_difficult_render_2", "suffix": "stl",},
-    {"module": "project_1_easy_render_2", "suffix": "stl",},
-    {"module": "project_1_difficult_render_3", "suffix": "stl",},
-    {"module": "project_1_easy_render_5", "suffix": "stl",},
-    {"module": "project_1_difficult_render_5", "suffix": "stl",},
-    {"module": "project_1_easy_render_3", "suffix": "stl",},
-    {"module": "project_2_difficult_render_1", "suffix": "dxf",},
-    {"module": "project_2_easy_render_4", "suffix": "dxf",},
-    {"module": "project_2_difficult_render_4", "suffix": "dxf",},
-    {"module": "project_2_easy_render_1", "suffix": "dxf",},
-    {"module": "project_2_difficult_render_2", "suffix": "dxf",},
-    {"module": "project_2_easy_render_2", "suffix": "dxf",},
-    {"module": "project_2_difficult_render_3", "suffix": "dxf",},
-    {"module": "project_2_easy_render_5", "suffix": "dxf",},
-    {"module": "project_2_difficult_render_5", "suffix": "dxf",},
-    {"module": "project_2_easy_render_3", "suffix": "dxf",},
+    # {"module": "difficult_render_5_for_dxf",    "suffix": "dxf"},
+    # {"module": "difficult_render_1",            "suffix": "stl",},
+    # {"module": "easy_render_4",                 "suffix": "stl",},
+    # {"module": "easy_render_1",                 "suffix": "stl",},
+    # {"module": "difficult_render_2",            "suffix": "stl",},
+    # {"module": "easy_render_2",                 "suffix": "stl",},
+    # {"module": "easy_render_5",                 "suffix": "stl",},
+    # {"module": "difficult_render_3",            "suffix": "stl",},
+    # {"module": "easy_render_6",                 "suffix": "stl",},
+    # {"module": "easy_render_7",                 "suffix": "stl",},
+    # {"module": "difficult_render_5",            "suffix": "stl",},
+    # {"module": "easy_render_8",                 "suffix": "stl",},
+    # {"module": "easy_render_9",                 "suffix": "stl",},
+    # {"module": "difficult_render_4",            "suffix": "stl",},
+    # {"module": "easy_render_10",                "suffix": "stl",},
+    {"module": "easy_render_3",                 "suffix": "stl",},
 ]
 
 number_of_threads = 4
@@ -38,8 +37,8 @@ class Job:
     def setup (self, module_name, output_format):
         self.module_name = module_name
         self.output_format = output_format
-        self.temp_file_name = "tmp_renderer_" + self.module_name + ".scad"
-        self.output_file_name = "outputs/" + self.module_name + "." + self.output_format
+        self.temp_file_name = "tmp_renderer_{}.scad".format(self.module_name)
+        self.output_file_name = "outputs/{}.{}".format(self.module_name,self.output_format)
         self.write_file()
 
     def run (self):
@@ -47,12 +46,12 @@ class Job:
             current_item = self.q.get()
             q.task_done()
             self.setup(current_item['module'], current_item['suffix'])
-            print(self.module_name + " rendering started")
+            print("{} rendering started".format(self.module_name))
             self.execute_render()
 
     def write_file (self):
         temp_file = open(self.temp_file_name, "w") 
-        temp_file.write("include <renderer.scad> \n" + self.module_name + "();")
+        temp_file.write("include <renderer.scad> \n {}();".format(self.module_name))
         temp_file.close()
     
     def execute_render (self):
@@ -62,7 +61,7 @@ class Job:
                 self.output_file_name,
                 self.temp_file_name
             ])
-        print(self.module_name + " rendering finished")
+        print("{} rendering finished".format(self.module_name))
         os.remove(self.temp_file_name)
 
 # Thread wrapper
@@ -88,3 +87,5 @@ for worker in worker_threads:
 
 # Tell python to wait for threads by "joining" them
 [worker.join() for worker in worker_threads]
+
+print( "rendering took: {}".format(datetime.now() - startTime) )

@@ -18,15 +18,11 @@ This was built with Python3.5.7 installed using pyenv, I'm no python master, thi
 
 ## Credits
 
-In the interests of making hard-to-render workloads I've used the following to eat up all your CPU cycles.
+__Dan Kirshner__
 
-### Dan Kirshner
+In the interests of making hard-to-render workloads I've used the thread module file from http://dkprojects.net/openscad-threads/ its fantastic!
 
-Thread module file from http://dkprojects.net/openscad-threads/ its fantastic!
-
-### A few people
-
-For more cpu stuff I used involute gears from here https://github.com/openscad/MCAD/blob/master/involute_gears.scad
+I've modified it so it doesn't limit the ```$fn``` variable because I don't want to reduce the load in this case.
 
 ## Running examples
 
@@ -44,6 +40,10 @@ Benchmarked on a mac with:
 * Fairly powerful graphics card
 * OpenSCAD version 2017.02.08 (git 2ef5333)
 * Not much else going on
+
+I've configured a pretty brutal test, possibly introducing a variation thats way too high. The preview at ```$fn=20;``` took about 45 seconds on my machine, the render in the UI took: seconds.
+
+Threaded stats here:
 
 | Threads | render time |
 | ------- | ----------- |
