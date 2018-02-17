@@ -179,9 +179,9 @@ module english_thread (diameter=0.25, threads_per_inch=20, length=1,
    mm_pitch = (1.0/threads_per_inch)*25.4;
    mm_length = length*25.4;
 
-   echo (str ("mm_diameter: ", mm_diameter));
-   echo (str ("mm_pitch: ", mm_pitch));
-   echo (str ("mm_length: ", mm_length));
+  //  echo (str ("mm_diameter: ", mm_diameter));
+  //  echo (str ("mm_pitch: ", mm_pitch));
+  //  echo (str ("mm_length: ", mm_length));
    metric_thread (mm_diameter, mm_pitch, mm_length, internal, n_starts,
                   thread_size, groove, square, rectangle, angle, taper, leadin,
                   leadfac);

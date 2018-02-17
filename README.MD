@@ -24,6 +24,18 @@ In the interests of making hard-to-render workloads I've used the thread module 
 
 I've modified it so it doesn't limit the ```$fn``` variable because I don't want to reduce the load in this case.
 
+## What it does
+
+The script uses a gateway scad file (renderer.scad) to include your code files, force rendering and set the quality - you'll need to change this to bring in your code or specify the quality.
+
+Then the script uses an array of dictionaries including the names of modules and the desired output, previously the code didn't allow for dxf rendering but I needed it for some of my frames to be cut out of aluminium.
+
+The script then creates a temporary scad file that includes the gateway script and triggers the desired module.
+
+The script then spins up as many threads as specified to render the module using subprocess to trigger OpenSCAD into the outputs directory and deletes the temporary scad file.
+
+Finally the script reports the runtime.
+
 ## Running examples
 
 The base code tests how fast this can process using 4 threads, execute the code with no changes to see how well it works with 4 threads.
@@ -33,6 +45,7 @@ Change the ```number_of_threads``` variable to see how well it does with 1,8,16,
 ## Some benchmarks
 
 Benchmarked on a mac with:
+
 * 3.31 GHz Intel Core i5 (4 core)
 * 32GB Ram
 * PCI SSD's
@@ -41,29 +54,31 @@ Benchmarked on a mac with:
 * OpenSCAD version 2017.02.08 (git 2ef5333)
 * Not much else going on
 
-I've configured a pretty brutal test, possibly introducing a variation thats way too high. The preview at ```$fn=20;``` took about 45 seconds on my machine, the render in the UI took: seconds.
+I've configured a pretty brutal test, possibly introducing a variation thats way too high because the ```$fn = 80``` increases the amount of operations dramatically, still why not test a boat with a storm?
 
 Threaded stats here:
 
-| Threads | render time |
-| ------- | ----------- |
-| 1 | ? mins |
-| 2 | ? mins |
-| 4 | ? mins |
-| 8 | ? mins |
-| 12 | ? mins |
-| 16 | ? mins |
+| Threads | Render time | Load notes |
+| ------- | ----------- | ------ |
+| 1 | ? mins | computer useable
+| 2 | ? mins | computer useable
+| 4 | ? mins | computer useable
+| 8 | ? mins | computer useable 
+| 12 | ? mins | computer slightly less useable
+| 16 | ? mins | computer a little less useable
 
 ## Using it in your projects
 
 There are 4 things you need to do to use this in your project:
 
 1. Move the base files into your project folder (or refer to them from here)
-1. Wrap working code areas in a module called ```render_working_code()```
+1. Wrap working code areas in a module called ```render_working_code()``` that specifies the ```$fn``` value you prefer
 1. Include your primary code files into the renderer.scad file
 1. Put the module names into the ```models``` list with respective ```module``` and ```suffix```
 
-__Note:__ The suffix has to be understandable by OpenSCAD.
+Because it queue's up the jobs in order, it would make sense to add your largest/slowest modules at the top.
+
+__Note:__ The suffix value has to be understandable by OpenSCAD.
 
 ## Licence
 

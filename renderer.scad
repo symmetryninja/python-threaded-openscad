@@ -1,3 +1,3 @@
 include <work_doc_1.scad>
-batch_rendering = "yup"; 
+batch_rendering = true; 
 $fn = 80;
