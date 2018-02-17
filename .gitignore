@@ -1,2 +1,3 @@
 /outputs/*
 *.stackdump
+tmp_renderer*
