@@ -1,30 +1,18 @@
 #!/usr/bin/env python3
-import threading, queue, subprocess, os
+import threading, queue, subprocess, os, yaml
 from datetime import datetime
 
 startTime = datetime.now()
 
-# Input Vars
-models = [
-    {"module": "easy_render_5_for_dxf",  "suffix": "dxf"},
-    # {"module": "difficult_render_1",     "suffix": "stl",},
-    {"module": "easy_render_4",          "suffix": "stl",},
-    {"module": "easy_render_1",          "suffix": "stl",},
-    # {"module": "difficult_render_2",     "suffix": "stl",},
-    {"module": "easy_render_2",          "suffix": "stl",},
-    {"module": "easy_render_5",          "suffix": "stl",},
-    # {"module": "difficult_render_3",     "suffix": "stl",},
-    {"module": "easy_render_6",          "suffix": "stl",},
-    {"module": "easy_render_7",          "suffix": "stl",},
-    # {"module": "difficult_render_5",     "suffix": "stl",},
-    {"module": "easy_render_8",          "suffix": "stl",},
-    {"module": "easy_render_9",          "suffix": "stl",},
-    # {"module": "difficult_render_4",     "suffix": "stl",},
-    {"module": "easy_render_10",         "suffix": "stl",},
-    {"module": "easy_render_3",          "suffix": "stl",},
-]
+#get the config stuff!
+stream = open('render_config.yaml', 'r')
+render_config = yaml.load(stream)
 
-number_of_threads = 4
+
+# Input Vars
+openscad_path = render_config["openscad_path"]
+models = render_config["models"]
+number_of_threads = render_config['number_of_threads']
 
 # Rendering worker class
 class Job:
@@ -56,7 +44,7 @@ class Job:
     
     def execute_render (self):
         subprocess.call([
-                "/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD", 
+                openscad_path, 
                 "-o",
                 self.output_file_name,
                 self.temp_file_name

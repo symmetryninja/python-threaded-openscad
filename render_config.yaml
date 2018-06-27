@@ -1,0 +1,53 @@
+openscad_path: "/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD"
+number_of_threads: 8
+models:
+  -
+    module: "easy_render_5_for_dxf"
+    suffix: "dxf"
+  -
+    module: "easy_render_4"
+    suffix: "stl"
+  # - 
+  #   module: "difficult_render_1"
+  #   suffix: "stl"
+  - 
+    module: "easy_render_1"
+    suffix: "stl"
+  - 
+    module: "easy_render_2"
+    suffix: "stl"
+  # - 
+  #   module: "difficult_render_4"
+  #   suffix: "stl"
+  - 
+    module: "easy_render_5"
+    suffix: "stl"
+  # - 
+  #   module: "difficult_render_2"
+  #   suffix: "stl"
+  - 
+    module: "easy_render_6"
+    suffix: "stl"
+  - 
+    module: "easy_render_7"
+    suffix: "stl"
+  # - 
+  #   module: "difficult_render_3"
+  #   suffix: "stl"
+  - 
+    module: "easy_render_8"
+    suffix: "stl"
+  - 
+    module: "easy_render_9"
+    suffix: "stl"
+  - 
+    module: "easy_render_10"
+    suffix: "stl"
+  # - 
+  #   module: "difficult_render_5"
+  #   suffix: "stl"
+  - 
+    module: "easy_render_3"
+    suffix: "stl"
+
+

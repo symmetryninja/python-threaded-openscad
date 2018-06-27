@@ -12,7 +12,7 @@ If you render multiple models out of one or many OpenSCAD files and you're happy
 
 * Python 3.5+
 * OpenSCAD
-* MacOS/Linux environment - unless you mod it for windows
+* MacOS/Linux environment - you can mod it for windows if you like
 
 This was built with Python3.5.7 installed using pyenv, I'm no python master, this is not tricky.
 
@@ -28,7 +28,7 @@ I've modified it so it doesn't limit the ```$fn``` variable because I don't want
 
 The script uses a gateway scad file (renderer.scad) to include your code files, force rendering and set the quality - you'll need to change this to bring in your code or specify the quality.
 
-Then the script uses an array of dictionaries including the names of modules and the desired output, previously the code didn't allow for dxf rendering but I needed it for some of my frames to be cut out of aluminium.
+The script uses an array of dictionaries including the names of modules and the desired output, previously the code didn't allow for dxf rendering but I needed it for some of my frames to be cut out of aluminium.
 
 The script then creates a temporary scad file that includes the gateway script and triggers the desired module.
 
@@ -80,11 +80,20 @@ There are 4 things you need to do to use this in your project:
 1. Move the base files into your project folder (or refer to them from here)
 1. Wrap working code areas in a module called ```render_working_code()``` that specifies the ```$fn``` value you prefer
 1. Include your primary code files into the renderer.scad file
-1. Put the module names into the ```models``` list with respective ```module``` and ```suffix```
+1. Set up your render_config.yaml file with
+    1. the module names into the ```models``` list with respective ```module``` and ```suffix```
+    2. the number of threads tou want to run
+    3. the path to openscad
 
 Because it queue's up the jobs in order, it would make sense to add your largest/slowest modules at the top.
 
-__Note:__ The suffix value has to be understandable by OpenSCAD.
+__Note:__ The suffix value can be anything understandable by OpenSCAD.
+
+## Todos
+
+* Make it so the repository can be seperate to the code being rendered
+* possibly use a git subtree with a bunch of assumed stuff?
+* tidy up the code a bit.
 
 ## Licence
 
