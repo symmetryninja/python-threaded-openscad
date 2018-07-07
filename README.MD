@@ -1,6 +1,6 @@
 # Threaded OpenSCAD rendering with Python3
 
-While rendering several, highly complex modules in OpenSCAD, i found the limit of one CPU thread to be not enough.
+While rendering several, highly complex modules in OpenSCAD, I found the limit of one CPU thread to be not enough.
 
 I wrote something in bash that makes use of ```&``` and decided to take it further to do it with organised threading and queueing in Python.
 
@@ -8,33 +8,50 @@ This code __does not__ make single operations faster, it only parralellises sing
 
 If you render multiple models out of one or many OpenSCAD files and you're happy to change your code to have an entry point blocker, this may help you get things done faster.
 
-## Requirements
-
-* Python 3.5+
-* OpenSCAD
-* MacOS/Linux environment - you can mod it for windows if you like
-
-This was built with Python3.5.7 installed using pyenv, I'm no python master, this is not tricky.
-
-## Credits
-
-Dan Kirshner.
-
-In the interests of making hard-to-render workloads I've used the thread module file from http://dkprojects.net/openscad-threads/ its fantastic!
-
-I've modified it so it doesn't limit the ```$fn``` variable because I don't want to reduce the load in this case.
-
 ## What it does
 
-The script uses a gateway scad file (renderer.scad) to include your code files, force rendering and set the quality - you'll need to change this to bring in your code or specify the quality.
+1. It uses a gateway scad file (renderer.scad) to include your code files
+1. Then it uses a yaml file that has a list of names of modules and the desired output format
+1. It then creates a temporary scad file that includes the gateway script and triggers the desired module
+1. The script spins up as many threads as specified in the config to render the module - it does this with  subprocess to trigger OpenSCAD into the outputs directory
+1. Then it deletes the temporary scad file
+1. Finally the script reports the runtime.
 
-The script uses an array of dictionaries including the names of modules and the desired output, previously the code didn't allow for dxf rendering but I needed it for some of my frames to be cut out of aluminium.
+## Using it in your projects
 
-The script then creates a temporary scad file that includes the gateway script and triggers the desired module.
+There are a few things you need to do to use this in your project:
 
-The script then spins up as many threads as specified to render the module using subprocess to trigger OpenSCAD into the outputs directory and deletes the temporary scad file.
+1. In your current code files wrap working code areas in a module called ```render_working_code()``` that specifies the ```$fn``` value you prefer while your working (I usually have it at about 40)
+1. create a `render_config.yaml` file (details below) in your repo
+1. Include your primary code files into the `renderer.scad` file in your repo
+1. Put the renderer.py into your `$PATH` or refer to it's full path
 
-Finally the script reports the runtime.
+Because it queue's up the jobs in order, it would make sense to add your largest/slowest modules at the top.
+
+__Note:__ The suffix value can be anything understandable by OpenSCAD.
+
+Once you have all this above you just need to execute the renderer.py script while you're CWD is in your project dir. It will expect there to be a `render_config.yaml` and `renderer.scad` file in there and probably freak out without it.
+
+## The `renderer.scad` file
+
+```OpenSCAD
+include <work_doc_1.scad>
+batch_rendering = true;
+```
+
+## The `render_config.yaml` file
+
+Only the models list is necessary in here
+
+```YAML
+openscad_path: "/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD" # optional on mac
+threads: 4 # optional - defaults to 8
+quality: 90 # optional - defaults to 96
+models: # required
+  - module: "easy_render_5_for_dxf" # name of the openscad function to run
+    suffix: "dxf" # Suffix is needed if you don't want an STL
+  - module: "another_render" # had no suffix so defaults to STL
+```
 
 ## Running examples
 
@@ -73,27 +90,26 @@ I do find it interesting that 8 things at a time slows it down that much. It is 
 
 If you have more core's use more threads!
 
-## Using it in your projects
-
-There are 4 things you need to do to use this in your project:
-
-1. Move the base files into your project folder (or refer to them from here)
-1. Wrap working code areas in a module called ```render_working_code()``` that specifies the ```$fn``` value you prefer
-1. Include your primary code files into the renderer.scad file
-1. Set up your render_config.yaml file with
-    1. the module names into the ```models``` list with respective ```module``` and ```suffix```
-    2. the number of threads tou want to run
-    3. the path to openscad
-
-Because it queue's up the jobs in order, it would make sense to add your largest/slowest modules at the top.
-
-__Note:__ The suffix value can be anything understandable by OpenSCAD.
-
 ## Todos
 
-* Make it so the repository can be seperate to the code being rendered
-* possibly use a git subtree with a bunch of assumed stuff?
+* ~~Make it so the repository can be seperate to the code being rendered~~
 * tidy up the code a bit.
+
+## Requirements
+
+* Python 3.5+
+* OpenSCAD
+* MacOS/Linux environment - you can mod it for windows if you like
+
+This was built with Python3.5.7 installed using pyenv, I'm no python master, this is not tricky.
+
+## Credits
+
+Dan Kirshner.
+
+In the interests of making hard-to-render workloads I've used the thread module file from [openscad-threads](http://dkprojects.net/openscad-threads/) its fantastic!
+
+I've modified it so it doesn't limit the ```$fn``` variable because while this is very useful in normal use, I don't want to reduce the load in this case.
 
 ## Licence
 

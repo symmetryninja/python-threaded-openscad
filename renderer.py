@@ -5,7 +5,7 @@ from datetime import datetime
 startTime = datetime.now()
 
 # import the params file if specified
-config_file = "{}/render_config.yaml".format(os.getcwd())
+config_file = "{}/render_config.yml".format(os.getcwd())
 
 # some defaults
 number_of_threads = 8
