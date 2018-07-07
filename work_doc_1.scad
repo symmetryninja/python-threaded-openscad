@@ -9,7 +9,7 @@ include <threads.scad>
 
 /** working output code **/
   module render_working_code() {
-    $fn = 20;
+    $fn = 40;
     translate([-20, -30, 0]) easy_render_1();
     translate([-20, -15, 0]) easy_render_2();
     translate([-20, 0, 0]) easy_render_3();
@@ -29,8 +29,6 @@ include <threads.scad>
     translate([20, 30, 0]) difficult_render_5();
 
     // easy_render_5_for_dxf(); 
-
-    //approx 45 seconds to preview
   }
 
 /** working output code **/
