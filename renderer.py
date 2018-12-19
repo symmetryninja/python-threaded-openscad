@@ -11,6 +11,7 @@ config_file = "{}/render_config.yml".format(os.getcwd())
 number_of_threads = 8
 quality = 96
 openscad_path = '/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD'
+filename = 'renderer.scad'
 
 # read the yaml in
 with open(config_file, 'r') as stream:
@@ -22,6 +23,8 @@ with open(config_file, 'r') as stream:
             number_of_threads = render_config['threads']
         if 'openscad_path' in render_config:
             openscad_path = render_config["openscad_path"]
+        if 'filename' in render_config:
+            filename = render_config["filename"]
         if 'models' in render_config:
             models = render_config["models"]
         else:
@@ -63,7 +66,7 @@ class Job:
 
     def write_file (self):
         temp_file = open(self.temp_file_name, "w") 
-        temp_file.write("include <renderer.scad> \n $fn={}; \n {}();".format(quality,self.module_name))
+        temp_file.write("include <{}> \n batch_rendering = true; \n $fn={}; \n {}();".format(filename, quality, self.module_name))
         temp_file.close()
     
     def execute_render (self):
