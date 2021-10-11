@@ -82,7 +82,7 @@ class Job:
                 self.temp_file_name
             ])
         print("{} rendering finished ({})".format(self.module_name, datetime.now() - self.start))
-        # os.remove(self.temp_file_name)
+        os.remove(self.temp_file_name)
 
 # Thread wrapper
 def create_thread(q):
