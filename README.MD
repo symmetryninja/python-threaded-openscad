@@ -107,6 +107,19 @@ I've modified it so it doesn't limit the ```$fn``` variable because while this i
 
 ## Licence
 
-[See Licence.txt](Licence.txt)
-
-Generally, do what you like with this code/project and say thanks if you want to - but if you save the world or break the universe or anything in between, you're on your own.
+```text
+/* 
+ * — — — — — — — — — — — — — — — — — — — — — — — — — — — — — — — — — 
+ * “THE BEER-WARE LICENSE” (Revision 42):
+ * <spidey> wrote this file. As long as you retain this  
+ * notice you can do whatever you want with this stuff. If we meet
+ * some day, and you think this stuff is worth it, you can buy me
+ * a beer in return.
+ * — — — — — — — — — — — — — — — — — — — — — — — — — — — — — — — — — 
+ * Amendment 1: The author(s) of this code accept absolutely no 
+ * liability for any damage or general bad things that may come as 
+ * part of its use. Any use of this software is deemed an agreement 
+ * to absolve the author(s) of any liability, culpability, 
+ * durability and any other “(*)ability” (good or bad).
+ */
+ ```

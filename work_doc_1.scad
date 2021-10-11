@@ -10,23 +10,23 @@ include <threads.scad>
 /** working output code **/
   module render_workspace() {
     $fn = 40;
-    translate([-20, -30, 0]) easy_render_1();
-    translate([-20, -15, 0]) easy_render_2();
-    translate([-20, 0, 0]) easy_render_3();
-    translate([-20, 15, 0]) easy_render_4();
-    translate([-20, 30, 0]) easy_render_5();
+    // translate([-20, -30, 0]) easy_render_1();
+    // translate([-20, -15, 0]) easy_render_2();
+    // translate([-20, 0, 0]) easy_render_3();
+    // translate([-20, 15, 0]) easy_render_4();
+    // translate([-20, 30, 0]) easy_render_5();
 
-    translate([0, -30, 0]) easy_render_6();
-    translate([0, -15, 0]) easy_render_7();
-    translate([0, 0, 0]) easy_render_8();
-    translate([0, 15, 0]) easy_render_9();
-    translate([0, 30, 0]) easy_render_10();
+    // translate([0, -30, 0]) easy_render_6();
+    // translate([0, -15, 0]) easy_render_7();
+    // translate([0, 0, 0]) easy_render_8();
+    // translate([0, 15, 0]) easy_render_9();
+    // translate([0, 30, 0]) easy_render_10();
 
-    translate([20, -30, 0]) difficult_render_1();
-    translate([20, -15, 0]) difficult_render_2();
-    translate([20, 0, 0]) difficult_render_3();
-    translate([20, 15, 0]) difficult_render_4();
-    translate([20, 30, 0]) difficult_render_5();
+    // translate([20, -30, 0]) difficult_render_1();
+    // translate([20, -15, 0]) difficult_render_2();
+    // translate([20, 0, 0]) difficult_render_3();
+    // translate([20, 15, 0]) difficult_render_4();
+    // translate([20, 30, 0]) difficult_render_5();
 
     // easy_render_5_for_dxf(); 
   }
