@@ -1,6 +1,7 @@
 #openscad_path: "/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD" # optional on mac/windows
 #threads: 8 # defaults to all cores
 #quality: 90 # default 90
+scad_file: work_doc_1.scad
 models:
   - module: "easy_render_5_for_dxf" # name of the openscad function to run
     suffix: "dxf" # Suffix is needed if you don't want an STL

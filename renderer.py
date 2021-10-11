@@ -16,11 +16,14 @@ if platform.system() == "Windows":
   openscad_path = 'c:/Program Files/OpenSCAD/openscad.exe'
 if platform.system() == "Darwin":
   openscad_path = '/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD'
+scad_file = 'renderer.scad'
 
 # read the yaml in
 with open(config_file, 'r') as stream:
     try:
         render_config = yaml.load(stream, Loader=yaml.FullLoader)
+        if 'scad_file' in render_config:
+            scad_file = render_config['scad_file']
         if 'quality' in render_config:
             quality = render_config['quality']
         if 'threads' in render_config:
@@ -68,7 +71,7 @@ class Job:
 
     def write_file (self):
         temp_file = open(self.temp_file_name, "w") 
-        temp_file.write("include <renderer.scad> \n $fn={}; \n {}();".format(quality,self.module_name))
+        temp_file.write("batch_rendering = true; \n include <{}> \n $fn={}; \n {}();".format(scad_file,quality,self.module_name))
         temp_file.close()
     
     def execute_render (self):
@@ -79,7 +82,7 @@ class Job:
                 self.temp_file_name
             ])
         print("{} rendering finished ({})".format(self.module_name, datetime.now() - self.start))
-        os.remove(self.temp_file_name)
+        # os.remove(self.temp_file_name)
 
 # Thread wrapper
 def create_thread(q):
