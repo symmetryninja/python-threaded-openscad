@@ -4,11 +4,11 @@ include <threads.scad>
   batch_rendering = false; 
 
   if (!batch_rendering) { 
-    render_working_code();
+    render_workspace();
   }
 
 /** working output code **/
-  module render_working_code() {
+  module render_workspace() {
     $fn = 40;
     translate([-20, -30, 0]) easy_render_1();
     translate([-20, -15, 0]) easy_render_2();
@@ -47,6 +47,7 @@ include <threads.scad>
   module difficult_render_5() {
     english_thread (diameter=1/4, threads_per_inch=20, length=10);
   }
+
   module easy_render_5_for_dxf() {
     projection(cut = false) {
       rotate([90,0,0]) {
@@ -56,42 +57,50 @@ include <threads.scad>
   }
 
   module easy_render_1() {
-    metric_thread (diameter=8, pitch=1, length=16, square=true, thread_size=1,groove=true, rectangle=0.333);
-
+    metric_thread (diameter=8, pitch=2, length=16, square=true, thread_size=1,groove=true, rectangle=0.333);
   }
   module easy_render_2() {
     metric_thread (diameter=8, pitch=2, length=16, square=true, thread_size=2,groove=true, rectangle=0.333);
-
   }
   module easy_render_3() {
     metric_thread (diameter=8, pitch=3, length=16, square=true, thread_size=3,groove=true, rectangle=0.333);
-
   }
   module easy_render_4() {
     metric_thread (diameter=8, pitch=4, length=16, square=true, thread_size=4,groove=true, rectangle=0.333);
-
   }
   module easy_render_5() {
     metric_thread (diameter=8, pitch=5, length=16, square=true, thread_size=5,groove=true, rectangle=0.333);
-
   }
-  
   module easy_render_6() {
-    easy_render_1();
+    metric_thread (diameter=8, pitch=6, length=16, square=true, thread_size=5,groove=true, rectangle=0.333);
   }
-
   module easy_render_7() {
-    easy_render_2();
+    metric_thread (diameter=8, pitch=7, length=16, square=true, thread_size=5,groove=true, rectangle=0.333);
   }
-
   module easy_render_8() {
-    easy_render_3();
+    metric_thread (diameter=8, pitch=8, length=16, square=true, thread_size=5,groove=true, rectangle=0.333);
   }
-
   module easy_render_9() {
-    easy_render_4();
+    metric_thread (diameter=8, pitch=9, length=16, square=true, thread_size=5,groove=true, rectangle=0.333);
   }
-
   module easy_render_10() {
-    easy_render_5();
+    metric_thread (diameter=8, pitch=10, length=16, square=true, thread_size=5,groove=true, rectangle=0.333);
+  }
+  module easy_render_11() {
+    metric_thread (diameter=8, pitch=11, length=16, square=true, thread_size=5,groove=true, rectangle=0.333);
+  }
+  module easy_render_12() {
+    metric_thread (diameter=8, pitch=12, length=16, square=true, thread_size=5,groove=true, rectangle=0.333);
+  }
+  module easy_render_13() {
+    metric_thread (diameter=8, pitch=13, length=16, square=true, thread_size=5,groove=true, rectangle=0.333);
+  }
+  module easy_render_14() {
+    metric_thread (diameter=8, pitch=14, length=16, square=true, thread_size=5,groove=true, rectangle=0.333);
+  }
+  module easy_render_15() {
+    metric_thread (diameter=8, pitch=15, length=16, square=true, thread_size=5,groove=true, rectangle=0.333);
+  }
+  module easy_render_16() {
+    metric_thread (diameter=8, pitch=16, length=16, square=true, thread_size=5,groove=true, rectangle=0.333);
   }

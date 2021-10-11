@@ -39,39 +39,39 @@ include <work_doc_1.scad>
 batch_rendering = true;
 ```
 
-## The `render_config.yaml` file
+## The `render_config.yml` file
 
 Only the models list is necessary in here
 
 ```YAML
-openscad_path: "/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD" # optional on mac
-threads: 4 # optional - defaults to 8
-quality: 90 # optional - defaults to 96
-models: # required
+#openscad_path: "/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD" # optional on mac/windows
+#threads: 16 # defaults to all cores
+#quality: 90 # default 90
+models:
   - module: "easy_render_5_for_dxf" # name of the openscad function to run
     suffix: "dxf" # Suffix is needed if you don't want an STL
-  - module: "another_render" # had no suffix so defaults to STL
+  - module: "easy_render_4" # had no suffix so defaults to STL
 ```
 
 ## Running examples
 
 The base code tests how fast this can process using 4 threads, execute the code with no changes to see how well it works with 4 threads.
 
-Change the ```number_of_threads``` variable to see how well it does with 1,8,16,42,200 threads and, provided your OS is happy to do so and doesn't run out of resources, it will render simultaneously and thus make use of all those CPU cores you're not using.
+Change the ```number_of_threads``` variable in the `yaml` file to see how well it does with 1,8,16,42,200 threads and, provided your OS is happy to do so and doesn't run out of resources, it will render simultaneously and thus make use of all those CPU cores you're not using.
 
 ## Some benchmarks
 
-Benchmarked on a mac with:
+Benchmarked on a Windows 11 machine with:
 
-* 3.31 GHz Intel Core i5 (4 core)
+* Intel Core i7 10700KF (8 core/16 thread) (3.8 GHz base, 4.8ghz boost)
 * 32GB Ram
 * PCI SSD's
-* Python 3.5.4
-* Fairly powerful graphics card
-* OpenSCAD version 2017.02.08 (git 2ef5333)
+* Python 3.9.7
+* RTX3080
+* OpenSCAD version 2021.05.26
 * Not much else going on
 
-I've configured a pretty brutal test, possibly introducing a variation thats way too high because the ```$fn = 80``` increases the amount of operations dramatically, still why not test a boat with a storm?
+I've configured a pretty brutal test, possibly introducing a variation thats way too high because the ```$fn = 90``` increases the amount of operations dramatically, still why not test a boat with a storm?
 
 In my default file, I've disabled rendering jobs for the really complex modules because they weren't demonstrating anything new, feel free to enable them.
 
@@ -79,29 +79,23 @@ Threaded stats here:
 
 | Threads | Render time | Notes |
 | ------- | ----------- | ------ |
-| 1 | 0:11:08 - baseline| Comparable to the GUI - computer didn't notice
-| 2 | 0:05:49 - slightly slower half | A good speedup - computer still very useable
-| 4 | 0:03:22 - a bit slower than a quarter | Useful for 4 core CPU's - computer quite useable
-| 8 | 0:03:38 - slower than a quarter | Diminishing returns on a 4 core CPU - computer less useable
+| 1 | 4:54 | Comparable to the GUI - computer didn't notice |
+| 2 | 2:35 | again Comparable to the GUI - computer didn't notice |
+| 8 | 1:17 | the total time for all 16 models was 1 second longer than the longest build  |
 
-As to be expected; my 4 core CPU does a better job at rendering 4 things at a time than it would trying to do 8 things at a time.
+As to be expected; my CPU does a better job at rendering 8 things at a time than it would trying to do 1 things at a time. 
 
-I do find it interesting that 8 things at a time slows it down that much. It is to be expected because when your computer tries to simultaneously use more threads than it has cores, it is forced to sleep and wake threads, this process queueing costs processing time.
+If you manage to render more models at once than you have threads, the CPU will start scheduling hard, so more threads than you have means less productivity.
 
-If you have more core's use more threads!
-
-## Todos
-
-* ~~Make it so the repository can be seperate to the code being rendered~~
-* tidy up the code a bit.
+By default the script will use a thread per registered CPU - which is one per hyper-thread - up until it runs out of models to render. 
 
 ## Requirements
 
-* Python 3.5+
+* Python 3.6+
 * OpenSCAD
-* MacOS/Linux environment - you can mod it for windows if you like
+* Windows/MacOS/Linux environment
 
-This was built with Python3.5.7 installed using pyenv, I'm no python master, this is not tricky.
+This was built with Python3.6 installed using pyenv, I'm no python master, this is not tricky.
 
 ## Credits
 

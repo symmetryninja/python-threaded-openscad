@@ -1,23 +1,29 @@
-openscad_path: "/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD"
-threads: 8
-quality: 10
+#openscad_path: "/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD" # optional on mac/windows
+#threads: 8 # defaults to all cores
+#quality: 90 # default 90
 models:
-  - module: "easy_render_5_for_dxf"
-    suffix: "dxf"
-  - module: "easy_render_4"
-  # - module: "difficult_render_1"
-  - module: "easy_render_1"
-  - module: "easy_render_2"
-  # - module: "difficult_render_4"
-  - module: "easy_render_5"
-  # - module: "difficult_render_2"
-  - module: "easy_render_6"
-  - module: "easy_render_7"
-  # - module: "difficult_render_3"
-  - module: "easy_render_8"
-  - module: "easy_render_9"
+  - module: "easy_render_5_for_dxf" # name of the openscad function to run
+    suffix: "dxf" # Suffix is needed if you don't want an STL
+  - module: "easy_render_1" # had no suffix so defaults to STL
   - module: "easy_render_10"
-  # - module: "difficult_render_5"
   - module: "easy_render_3"
+  - module: "easy_render_15"
+  - module: "easy_render_8"
+  - module: "easy_render_16"
+  - module: "easy_render_4" 
+  - module: "easy_render_6"
+  - module: "easy_render_14"
+  - module: "easy_render_5"
+  - module: "easy_render_11"
+  - module: "easy_render_7"
+  - module: "easy_render_13"
+  - module: "easy_render_2"
+  - module: "easy_render_9"
+  - module: "easy_render_12"
+  # - module: "difficult_render_1"
+  # - module: "difficult_render_2"
+  # - module: "difficult_render_3"
+  # - module: "difficult_render_4"
+  # - module: "difficult_render_5"
 
 
