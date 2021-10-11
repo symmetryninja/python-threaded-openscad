@@ -85,6 +85,10 @@ Threaded stats here:
 
 As to be expected; my CPU does a better job at rendering 8 things at a time than it would trying to do 1 things at a time. 
 
+This is what it looks like:
+
+![16-threads.png](16-threads.png)
+
 If you manage to render more models at once than you have threads, the CPU will start scheduling hard, so more threads than you have means less productivity.
 
 By default the script will use a thread per registered CPU - which is one per hyper-thread - up until it runs out of models to render. 
