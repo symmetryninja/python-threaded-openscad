@@ -1,30 +1,32 @@
-#!/usr/bin/env python3
-import threading, queue, subprocess, os, sys, yaml
+##!/usr/bin/env python3
+import threading, queue, subprocess, os, sys, yaml, platform, multiprocessing
+# from datetime.datetime 
 from datetime import datetime
 
 startTime = datetime.now()
 
 # import the params file if specified
-config_file = "{}/render_config.yml".format(os.getcwd())
+current_dir = os.getcwd()
+config_file = "{}/render_config.yml".format(current_dir)
 
 # some defaults
-number_of_threads = 8
-quality = 96
-openscad_path = '/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD'
-filename = 'renderer.scad'
+number_of_threads = multiprocessing.cpu_count()
+quality = 90
+if platform.system() == "Windows":
+  openscad_path = 'c:/Program Files/OpenSCAD/openscad.exe'
+if platform.system() == "Darwin":
+  openscad_path = '/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD'
 
 # read the yaml in
 with open(config_file, 'r') as stream:
     try:
-        render_config = yaml.load(stream)
+        render_config = yaml.load(stream, Loader=yaml.FullLoader)
         if 'quality' in render_config:
             quality = render_config['quality']
         if 'threads' in render_config:
             number_of_threads = render_config['threads']
         if 'openscad_path' in render_config:
             openscad_path = render_config["openscad_path"]
-        if 'filename' in render_config:
-            filename = render_config["filename"]
         if 'models' in render_config:
             models = render_config["models"]
         else:
@@ -47,8 +49,8 @@ class Job:
     def setup (self, module_name, output_format = "stl"):
         self.module_name = module_name
         self.output_format = output_format
-        self.temp_file_name = "{}/tmp_renderer_{}.scad".format(os.getcwd(), self.module_name)
-        self.output_file_name = "{}/outputs/{}.{}".format(os.getcwd(), self.module_name, self.output_format)
+        self.temp_file_name = "{}/tmp_renderer_{}.scad".format(current_dir, self.module_name)
+        self.output_file_name = "{}/outputs/{}.{}".format(current_dir, self.module_name, self.output_format)
         self.write_file()
 
     def run (self):
@@ -66,7 +68,7 @@ class Job:
 
     def write_file (self):
         temp_file = open(self.temp_file_name, "w") 
-        temp_file.write("include <{}> \n batch_rendering = true; \n $fn={}; \n {}();".format(filename, quality, self.module_name))
+        temp_file.write("include <renderer.scad> \n $fn={}; \n {}();".format(quality,self.module_name))
         temp_file.close()
     
     def execute_render (self):
