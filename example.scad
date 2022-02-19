@@ -1,14 +1,9 @@
 
 /** batch rendering code **/
 include <threads.scad>
-  batch_rendering = false; 
-
-  if (!batch_rendering) { 
-    render_workspace();
-  }
 
 /** working output code **/
-  module render_workspace() {
+  if (is_undef(batch_rendering)) {
     $fn = 40;
     // translate([-20, -30, 0]) easy_render_1();
     // translate([-20, -15, 0]) easy_render_2();

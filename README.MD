@@ -4,53 +4,56 @@ While rendering several, highly complex modules in OpenSCAD, I found the limit o
 
 I wrote something in bash that makes use of ```&``` and decided to take it further to do it with organised threading and queueing in Python.
 
-This code __does not__ make single operations faster, it only parralellises single operations and runs them simultaneously. If you've got a single model being rendered, it __will not__ make anything faster. If you've got heaps of models being rendered at once, __it wont do that faster__ either.
-
-If you render multiple models out of one or many OpenSCAD files and you're happy to change your code to have an entry point blocker, this may help you get things done faster.
+This code __does not__ make single operations faster, it only parralellises single operations and runs them simultaneously. If you've got a single model being rendered, it __will not__ make anything faster.
 
 ## What it does
 
-1. It uses a gateway scad file (renderer.scad) to include your code files
-1. Then it uses a yaml file that has a list of names of modules and the desired output format
-1. It then creates a temporary scad file that includes the gateway script and triggers the desired module
-1. The script spins up as many threads as specified in the config to render the module - it does this with  subprocess to trigger OpenSCAD into the outputs directory
-1. Then it deletes the temporary scad file
-1. Finally the script reports the runtime.
+1. This script loads the `render_config.yaml` file that has config and a list of names of modules and the desired output format
+2. For each entry in the `models` list in the config the code generates a temporary file
+3. For each temporary scad file it runs a subprocess thread that renders and pipes the output to a file in the `output` directory
+4. Then it deletes the temporary scad files
+5. Finally the script reports the runtime.
 
 ## Using it in your projects
 
-There are a few things you need to do to use this in your project:
+These instructions assume you have a single OpenSCAD file or a single entrypoint. There are a few things you need to do to use this in your projects:
 
-1. In your current code files wrap working code areas in a module called ```render_working_code()``` that specifies the ```$fn``` value you prefer while your working (I usually have it at about 40)
-1. create a `render_config.yaml` file (details below) in your repo
-1. Include your primary code files into the `renderer.scad` file in your repo
-1. Put the renderer.py into your `$PATH` or refer to it's full path
-
-Because it queue's up the jobs in order, it would make sense to add your largest/slowest modules at the top.
+1. create `render_config.yaml` in the same folder as your entrypoint OpenSCAD using the example code block
+2. Use the put the workspace
+3. Put the renderer.py into your `$PATH` or refer to it's full path
 
 __Note:__ The suffix value can be anything understandable by OpenSCAD.
 
-Once you have all this above you just need to execute the renderer.py script while you're CWD is in your project dir. It will expect there to be a `render_config.yaml` and `renderer.scad` file in there and probably freak out without it.
-
-## The `renderer.scad` file
-
-```OpenSCAD
-include <work_doc_1.scad>
-batch_rendering = true;
-```
+Once you have all this above you just need to execute the renderer.py script while you're in your project directory.
 
 ## The `render_config.yml` file
 
 Only the models list is necessary in here
 
 ```YAML
+scad_file: mycoolfile.scad
 #openscad_path: "/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD" # optional on mac/windows
 #threads: 16 # defaults to all cores
-#quality: 90 # default 90
+#quality: 95 # default 95
 models:
   - module: "easy_render_5_for_dxf" # name of the openscad function to run
     suffix: "dxf" # Suffix is needed if you don't want an STL
   - module: "easy_render_4" # had no suffix so defaults to STL
+```
+
+## Example project scad file
+
+```c++
+/** working output code **/
+if (is_undef(batch_rendering)) {
+  $fn = 40; // the FN for your prototyping
+
+  // your prototype code
+
+}
+
+// your module code here
+
 ```
 
 ## Running examples

@@ -1,25 +1,49 @@
 ##!/usr/bin/env python3
-import threading, queue, subprocess, os, sys, yaml, platform, multiprocessing
+import threading, queue, subprocess, os, sys, yaml, platform, multiprocessing, getopt
 # from datetime.datetime 
 from datetime import datetime
 
 startTime = datetime.now()
 
-# import the params file if specified
+# import the params file
 current_dir = os.getcwd()
-config_file = "{}/render_config.yml".format(current_dir)
+config_file = "render_config.yml"
+scad_file = "project.scad"
+
+help_text = """
+OpenSCAD threaded renderer
+--------------------------
+usage: renderer.py -f <scadfile> -c <configfile>
+Params:
+    * -f (optional) : base scad file - defaults to project.scad, can be overridden by config file
+    * -c (optional) : config file - defaults to render_config.yaml
+"""
+
+# parse arguments
+try:
+    opts, args = getopt.getopt(sys.argv[1:],"hf:c:",["scadfile=","configfile="])
+except getopt.GetoptError:
+    print (help_text)
+    sys.exit(2)
+for opt, arg in opts:
+    if opt == '-h':
+        print (help_text)
+        sys.exit()
+    elif opt in ("-f", "--scadfile"):
+        scad_file = arg
+    elif opt in ("-c", "--configfile"):
+        config_file = arg
 
 # some defaults
 number_of_threads = multiprocessing.cpu_count()
-quality = 90
+quality = 95
 if platform.system() == "Windows":
   openscad_path = 'c:/Program Files/OpenSCAD/openscad.exe'
 if platform.system() == "Darwin":
   openscad_path = '/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD'
-scad_file = 'renderer.scad'
 
 # read the yaml in
-with open(config_file, 'r') as stream:
+with open("{}/{}".format(current_dir, config_file), 'r') as stream:
     try:
         render_config = yaml.load(stream, Loader=yaml.FullLoader)
         if 'scad_file' in render_config:
