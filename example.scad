@@ -1,5 +1,4 @@
 
-/** batch rendering code **/
 include <threads.scad>
 
 /** working output code **/
