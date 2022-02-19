@@ -8,8 +8,8 @@ This code __does not__ make single operations faster, it only parralellises sing
 
 ## What it does
 
-1. This script loads the `render_config.yaml` file that has config and a list of names of modules and the desired output format
-2. For each entry in the `models` list in the config the code generates a temporary file
+1. This script loads the `render_config.yaml` file that has config and a list of names of modules and output formats
+2. For each entry in the `models` list in the config the code generates a temporary scad file
 3. For each temporary scad file it runs a subprocess thread that renders and pipes the output to a file in the `output` directory
 4. Then it deletes the temporary scad files
 5. Finally the script reports the runtime.
