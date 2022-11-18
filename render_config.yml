@@ -1,5 +1,5 @@
 #openscad_path: "/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD" # optional on mac/windows
-threads: 4 # defaults to all cores
+# threads: 8 # defaults to all cores
 #quality: 95 # default 95
 scad_file: example.scad
 models:
