@@ -14,8 +14,8 @@ By default, the code looks at your CPU and determines how many threads to run ba
 2. In config mode this script loads the `render_config.yaml` file that has core config values and a list of names of modules and output formats
 3. For each entry in the `models` list in the config the code generates a temporary scad file that sets a variable `batch_rendering` to true
 4. For each temporary scad file it runs a subprocess thread that renders and pipes the output to a file in the `output` directory
-6. It deletes the temporary scad files
-7. Finally the script reports the runtime
+5. It deletes the temporary scad files
+6. Finally the script reports the runtime
 
 ## Using it in your projects
 
@@ -47,7 +47,7 @@ module mycool_model_for_dxf() '//render.model.dxf'
 
 ### Config file mode
 
-You will need to: 
+You will need to:
 
 1. create `render_config.yaml` in the same folder as your entrypoint OpenSCAD using the example code block
 2. Use the workspace example below
@@ -152,7 +152,7 @@ This is what it looks like:
 
 If you manage to render more models at once than you have threads, the CPU will start scheduling hard, so more threads than you have means less productivity.
 
-By default the script will use a thread per registered CPU - which is one per hyper-thread - up until it runs out of models to render. 
+By default the script will use a thread per registered CPU - which is one per hyper-thread - up until it runs out of models to render.
 
 ## Requirements
 
