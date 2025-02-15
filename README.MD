@@ -74,6 +74,9 @@ models:
 ## Example project scad file
 
 ```c++
+//render.quality [85]
+//render.number_of_threads [36]
+
 /** working output code **/
 if (is_undef(batch_rendering)) {
   $fn = 40; // the FN for your prototyping

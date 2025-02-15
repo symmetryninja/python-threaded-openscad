@@ -13,7 +13,7 @@ current_dir = os.getcwd()
 parser = ArgumentParser()
 parser.add_argument("-f", "--file", dest="scad_file", help="OpenSCAD project filename", default="project.scad")
 parser.add_argument("-c", "--config", dest='config_file', help="Config filename", default="render_config.yml")
-parser.add_argument("-a", "--auto", dest='automated', help="Config filename", default=True)
+parser.add_argument("-a", "--auto", dest='automated', help="Automated mode", default=True)
 args = parser.parse_args()
 
 config_file = args.config_file
@@ -63,18 +63,18 @@ else:
             if '//render.quality' in line: # quality
                 quality = int(line.replace(']','[').split('[')[1])
                 print('found quality: {}'.format(quality))
-            elif '//render.number_of_threads' in line: # threads
+            if '//render.number_of_threads' in line: # threads
                 number_of_threads = int(line.replace(']','[').split('[')[1])
                 print('found number_of_threads: {}'.format(number_of_threads))
-            elif '//render.model.stl' in line: # stl file
+            if '//render.model.stl' in line: # stl file
                 module_name = re.search('module (.*)\\(', line).group(1)
                 print('found module {}'.format(module_name))
                 models += [dict(suffix='stl', module = module_name)]
-            elif '////render.model.svg' in line: # svg file
+            if '//render.model.svg' in line: # svg file
                 module_name = re.search('module (.*)\\(', line).group(1)
                 print('found module {}'.format(module_name))
                 models += [dict(suffix='svg', module = module_name)]
-            elif '////render.model.dxf' in line: # dxf file
+            if '//render.model.dxf' in line: # dxf file
                 module_name = re.search('module (.*)\\(', line).group(1)
                 print('found module {}'.format(module_name))
                 models += [dict(suffix='dxf', module = module_name)]
