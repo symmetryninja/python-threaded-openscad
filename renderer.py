@@ -14,23 +14,26 @@ parser = ArgumentParser()
 parser.add_argument("-f", "--file", dest="scad_file", help="OpenSCAD project filename", default="project.scad")
 parser.add_argument("-c", "--config", dest='config_file', help="Config filename", default="render_config.yml")
 parser.add_argument("-a", "--auto", dest='automated', help="Automated mode", default=True)
+parser.add_argument("-o", "--openscad", dest='openscad_path', help="path to the openscad binary", default='')
 args = parser.parse_args()
 
 config_file = args.config_file
 scad_file = args.scad_file
 automated = args.automated
+openscad_path = args.openscad_path
 models = []
 
 # some defaults
 number_of_threads = multiprocessing.cpu_count()
 quality = 95
-if platform.system() == "Windows":
-    openscad_path = 'c:/Program Files/OpenSCAD/openscad.exe'
-if platform.system() == "Darwin":
-    openscad_path = '/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD'
-if platform.system() == "Linux":
-    result = subprocess.run(['which', 'openscad'], stdout=subprocess.PIPE)
-    openscad_path = result.stdout.strip() 
+if openscad_path == '':
+    if platform.system() == "Windows":
+        openscad_path = 'c:/Program Files/OpenSCAD/openscad.exe'
+    if platform.system() == "Darwin":
+        openscad_path = '/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD'
+    if platform.system() == "Linux":
+        result = subprocess.run(['which', 'openscad'], stdout=subprocess.PIPE)
+        openscad_path = result.stdout.strip()
 
 # read the yaml in
 if not automated:
