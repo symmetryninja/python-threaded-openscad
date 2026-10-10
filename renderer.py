@@ -1,19 +1,25 @@
 #!/usr/bin/env python3
-import threading, queue, subprocess, os, sys, yaml, platform, multiprocessing, re
+import threading, queue, subprocess, os, sys, yaml, platform, multiprocessing, re, shutil
 # from datetime.datetime 
 from datetime import datetime
-from argparse import ArgumentParser
-parser = ArgumentParser()
+from argparse import ArgumentParser, ArgumentTypeError
 
 startTime = datetime.now()
 
 # import the params file
 current_dir = os.getcwd()
 
+def str_to_bool(value):
+    if value.lower() in ('true', 't', 'yes', 'y', '1'):
+        return True
+    if value.lower() in ('false', 'f', 'no', 'n', '0'):
+        return False
+    raise ArgumentTypeError("expected true or false, got '{}'".format(value))
+
 parser = ArgumentParser()
 parser.add_argument("-f", "--file", dest="scad_file", help="OpenSCAD project filename", default="project.scad")
 parser.add_argument("-c", "--config", dest='config_file', help="Config filename", default="render_config.yml")
-parser.add_argument("-a", "--auto", dest='automated', help="Automated mode", default=True)
+parser.add_argument("-a", "--auto", dest='automated', help="Automated mode, -a=False uses the config file", type=str_to_bool, default=True)
 parser.add_argument("-o", "--openscad", dest='openscad_path', help="path to the openscad binary", default='')
 args = parser.parse_args()
 
@@ -26,36 +32,25 @@ models = []
 # some defaults
 number_of_threads = multiprocessing.cpu_count()
 quality = 95
-if openscad_path == '':
-    if platform.system() == "Windows":
-        openscad_path = 'c:/Program Files/OpenSCAD/openscad.exe'
-    if platform.system() == "Darwin":
-        openscad_path = '/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD'
-    if platform.system() == "Linux":
-        result = subprocess.run(['which', 'openscad'], stdout=subprocess.PIPE)
-        openscad_path = result.stdout.strip()
 
 # read the yaml in
 if not automated:
-    with open("{}/{}".format(current_dir, config_file), 'r') as stream:
-        try:
-            render_config = yaml.load(stream, Loader=yaml.FullLoader)
-            if 'scad_file' in render_config:
-                scad_file = render_config['scad_file']
-            if 'quality' in render_config:
-                quality = render_config['quality']
-            if 'threads' in render_config:
-                number_of_threads = render_config['threads']
-            if 'models' in render_config:
-                models = render_config["models"]
-            else:
-                raise Exception("no models to render in yaml file?")
-        except yaml.YAMLError as exc:
-            print(exc)
-            sys.exit
-        except Exception as exc:
-            print(exc)
-            sys.exit
+    try:
+        with open("{}/{}".format(current_dir, config_file), 'r') as stream:
+            render_config = yaml.load(stream, Loader=yaml.FullLoader) or {}
+    except (OSError, yaml.YAMLError) as exc:
+        sys.exit("couldn't load config file: {}".format(exc))
+    if 'scad_file' in render_config:
+        scad_file = render_config['scad_file']
+    if 'quality' in render_config:
+        quality = render_config['quality']
+    if 'threads' in render_config:
+        number_of_threads = render_config['threads']
+    if 'openscad_path' in render_config and openscad_path == '':
+        openscad_path = render_config['openscad_path']
+    if not render_config.get('models'):
+        sys.exit("no models to render in {}".format(config_file))
+    models = render_config["models"]
 else:
     ## load the file and look for decorators
     config_decorator = '//render'
@@ -66,24 +61,35 @@ else:
             if '//render.quality' in line: # quality
                 quality = int(line.replace(']','[').split('[')[1])
                 print('found quality: {}'.format(quality))
-            if '//render.number_of_threads' in line: # threads
+            elif '//render.number_of_threads' in line: # threads
                 number_of_threads = int(line.replace(']','[').split('[')[1])
                 print('found number_of_threads: {}'.format(number_of_threads))
-            if '//render.model.stl' in line: # stl file
+            elif '//render.model.stl' in line: # stl file
                 module_name = re.search('module (.*)\\(', line).group(1)
                 print('found module {}'.format(module_name))
                 models += [dict(suffix='stl', module = module_name)]
-            if '//render.model.svg' in line: # svg file
+            elif '//render.model.svg' in line: # svg file
                 module_name = re.search('module (.*)\\(', line).group(1)
                 print('found module {}'.format(module_name))
                 models += [dict(suffix='svg', module = module_name)]
-            if '//render.model.dxf' in line: # dxf file
+            elif '//render.model.dxf' in line: # dxf file
                 module_name = re.search('module (.*)\\(', line).group(1)
                 print('found module {}'.format(module_name))
                 models += [dict(suffix='dxf', module = module_name)]
             else:
                 print('unknown render line: {}'.format(line) )
     print(models)
+
+if openscad_path == '':
+    if platform.system() == "Windows":
+        openscad_path = 'c:/Program Files/OpenSCAD/openscad.exe'
+    if platform.system() == "Darwin":
+        openscad_path = '/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD'
+    if platform.system() == "Linux":
+        openscad_path = shutil.which('openscad') or ''
+
+if not openscad_path or not os.access(openscad_path, os.X_OK):
+    sys.exit("openscad binary not found ('{}'), pass it with -o /path/to/openscad".format(openscad_path))
 
 # Rendering worker class
 class Job:
@@ -101,9 +107,12 @@ class Job:
         self.write_file()
 
     def run (self):
-        while not self.q.empty():
-            current_item = self.q.get()
-            q.task_done()
+        while True:
+            try:
+                current_item = self.q.get_nowait()
+            except queue.Empty:
+                return
+            self.q.task_done()
             if 'suffix' in current_item:
                 self.setup(current_item['module'], current_item['suffix'])
             else:
@@ -119,14 +128,16 @@ class Job:
         temp_file.close()
     
     def execute_render (self):
-        subprocess.call([
-                openscad_path, 
-                "-o",
-                self.output_file_name,
-                self.temp_file_name
-            ])
-        print("{} rendering finished ({})".format(self.module_name, datetime.now() - self.start))
-        os.remove(self.temp_file_name)
+        try:
+            subprocess.call([
+                    openscad_path, 
+                    "-o",
+                    self.output_file_name,
+                    self.temp_file_name
+                ])
+            print("{} rendering finished ({})".format(self.module_name, datetime.now() - self.start))
+        finally:
+            os.remove(self.temp_file_name)
 
 # Thread wrapper
 def create_thread(q):

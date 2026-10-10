@@ -2,3 +2,4 @@
 *.stackdump
 tmp_renderer*
 .vscode
+.idea
