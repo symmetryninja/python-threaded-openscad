@@ -64,18 +64,15 @@ else:
             elif '//render.number_of_threads' in line: # threads
                 number_of_threads = int(line.replace(']','[').split('[')[1])
                 print('found number_of_threads: {}'.format(number_of_threads))
-            elif '//render.model.stl' in line: # stl file
-                module_name = re.search('module (.*)\\(', line).group(1)
+            elif '//render.model.' in line: # stl / svg / dxf file
+                suffix_match = re.search(r'//render\.model\.(stl|svg|dxf)\b', line)
+                module_match = re.search(r'\bmodule\s+(\w+)\s*\(', line)
+                if not suffix_match or not module_match:
+                    print('skipping render tag without a module declaration: {}'.format(line.strip()))
+                    continue
+                module_name = module_match.group(1)
                 print('found module {}'.format(module_name))
-                models += [dict(suffix='stl', module = module_name)]
-            elif '//render.model.svg' in line: # svg file
-                module_name = re.search('module (.*)\\(', line).group(1)
-                print('found module {}'.format(module_name))
-                models += [dict(suffix='svg', module = module_name)]
-            elif '//render.model.dxf' in line: # dxf file
-                module_name = re.search('module (.*)\\(', line).group(1)
-                print('found module {}'.format(module_name))
-                models += [dict(suffix='dxf', module = module_name)]
+                models += [dict(suffix=suffix_match.group(1), module = module_name)]
             else:
                 print('unknown render line: {}'.format(line) )
     print(models)
