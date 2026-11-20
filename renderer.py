@@ -90,11 +90,13 @@ if not openscad_path or not os.access(openscad_path, os.X_OK):
 
 # Rendering worker class
 class Job:
-    module_name = output_format = temp_file_name = output_file_name = start = ""
-
-    def __init__ (self, q):
-        threading.Thread.__init__(self)
+    def __init__ (self, q: queue.Queue):
         self.q = q
+        self.module_name = ""
+        self.output_format = ""
+        self.temp_file_name = ""
+        self.output_file_name = ""
+        self.start = datetime.now()
 
     def setup (self, module_name, output_format = "stl"):
         self.module_name = module_name
